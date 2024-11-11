@@ -3,3 +3,4 @@
 *.ipynb
 slurm-*.out
 wandb
+apps/mtp/output_tiny/

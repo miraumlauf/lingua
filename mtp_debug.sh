@@ -1,8 +1,8 @@
 #!/bin/bash
-#SBATCH --job-name=mtp_debug
+#SBATCH --job-name=mtp_torchrun
 #SBATCH --nodes=1
 #SBATCH --ntasks=4
-#SBATCH --cpus-per-task=8
+#SBATCH --cpus-per-task=4
 #SBATCH --mem=8GB
 #SBATCH --time=00:30:00
 #SBATCH --partition=dev_gpu_4_a100
@@ -14,8 +14,11 @@ source activate lingua_241105
 NCCL_IB_DISABLE=1
 NCCL_BLOCKING_WAIT=1
 export NCCL_DEBUG=INFO  
+
+export TORCH_DISTRIBUTED_DEBUG=DETAIL
+
 # Run Debug 
 #python -m apps.mtp.train config=apps/mtp/configs/debug.yaml
 torchrun --nproc-per-node=4 -m apps.mtp.train config=apps/mtp/configs/debug.yaml
 
-echo "MTP debug job completed successfully."
+echo "MTP debug job completed successfully ✔️"

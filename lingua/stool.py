@@ -16,7 +16,7 @@ from lingua.args import dataclass_from_dict
 class StoolArgs:
     config: Any = None
     launcher: str = "sbatch"  # Can be sbatch or bash if already in salloc
-    script: str = "apps.main.train"  # The script to run.
+    script: str = "apps.mtp.train"  # The script to run.
     copy_code: bool = True  # Wether to copy code to dump dir
     dirs_exists_ok: bool = (
         False  # Wether to copy new code and config and run regardless that dir exists

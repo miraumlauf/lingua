@@ -365,6 +365,19 @@ def train(args: TrainArgs):
 
             input_ids = batch[:, :, 0].cuda()
             labels = batch[:, :, 1:].cuda()
+            
+            # CHANGED: PRINT INSERTED
+            # Print shapes to verify dimensions
+            print("Input IDs Shape:", input_ids.shape)  # Should show (batch_size, sequence_length)
+            print("Labels Shape:", labels.shape)        # Should show (batch_size, sequence_length, n_future_tokens)
+
+            # Print a few sample token sequences (first two in batch for simplicity)
+            # for i in range(2):  # Adjust the range as needed
+            #     print(f"Input Tokens [{i}]:", input_ids[i].cpu().tolist())  # Detach and move to CPU for printing
+            #     print(f"Label Tokens [{i}]:", labels[i].cpu().tolist())
+
+            # CHANGE END
+            
             data_load_time = round(timer() - data_load_start, 4)
             nwords_since_last_log += input_ids.numel()
 

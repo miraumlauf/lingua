@@ -1,6 +1,6 @@
 # Template config, need to change dump_dir, data.root_dir and tokenizer.path
 
-dump_dir: "./apps/mtp/output_tiny"  # for debug job
+dump_dir: "./apps/mtp/output_tiny_single"  # for debug job
 name: "debug"
 steps: 1000
 # probe_freq: 100
@@ -32,7 +32,7 @@ data:
         # dclm_baseline_1.0: 1.0 -> changed
     batch_size: 4 #CHANGED from 16
     prefetch_size: 16 #64
-    seq_len: 1024 #4096
+    seq_len: 6 # 1024 #4096
     n_views: 4
     load_async: true
     tokenizer:

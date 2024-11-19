@@ -5,6 +5,8 @@ import subprocess
 import json
 import uuid
 
+xyz
+
 def run_command(command):
     print(f"Running: {command}")
     subprocess.run(command, shell=True, check=True)

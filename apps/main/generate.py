@@ -158,8 +158,11 @@ class PackedCausalTransformerGenerator:
         This class creates a fixed size cache of size max_tokens or sum of prompt sizes
         + the max number of generated tokens per sequence.
         """
+        # store model & tokenizer
         self.model = model
         self.tokenizer = tokenizer
+        
+        # initialize configurations parameters
         self.temperature = cfg.temperature
         self.top_p = cfg.top_p
         self.top_k = cfg.top_k
@@ -171,7 +174,7 @@ class PackedCausalTransformerGenerator:
         self.max_until_size = max([len(e) for e in self.until]) if self.until else 1
         self.device = cfg.device
 
-        # Compile if necessary
+        # Compile if necessary (methods for optimization)
         self.prefill = torch.compile(self.prefill, disable=not cfg.compile_prefilling)
         self.generate_next_token = torch.compile(
             self.generate_next_token,
@@ -179,9 +182,10 @@ class PackedCausalTransformerGenerator:
             disable=not cfg.reduce_generation_overhead,
         )
 
-        self.show_progress = cfg.show_progress
-        self.dtype = dict(fp32=torch.float32, bf16=torch.bfloat16)[cfg.dtype]
+        self.show_progress = cfg.show_progress # display a progress bar during generation
+        self.dtype = dict(fp32=torch.float32, bf16=torch.bfloat16)[cfg.dtype] # data type for computation
 
+        # Cache Managment Variables
         self.prefill_doc_id, self.prefill_tok_id = None, None
         self.padded_doc_id, self.padded_tok_id = None, None
         self.current_doc_id, self.current_tok_id = None, None

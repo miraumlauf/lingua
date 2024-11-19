@@ -1,0 +1,18 @@
+name: generate
+dump_dir: ./apps/mtp/output_generate
+metric_log_dir: null
+ckpt_dir: ./apps/mtp/output_tiny/checkpoints/0000001000
+generator:
+  temperature: 1.0
+  top_p: 0.95
+  top_k: 10.0
+  max_gen_len: 100
+  max_tokens: 1024
+  max_prompt_len: 50
+  until: []
+  compile_prefilling: false
+  reduce_generation_overhead: false
+  show_progress: false
+  dtype: bf16
+  device: cuda
+single_prompt: Tell me a story.

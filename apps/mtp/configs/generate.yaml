@@ -1,0 +1,26 @@
+name: "generate"
+dump_dir: "./apps/mtp/output_generate"
+# metric_log_dir: str OPTIONAL
+ckpt_dir: "./apps/mtp/output_tiny/checkpoints/0000001000"
+
+generator:
+  # main.generate.PackedCausalTransformerGeneratorArgs
+  temperature: 1.0
+  top_p: 0.95
+  top_k: 10
+  max_gen_len: 100 # Maximum generation length
+  max_tokens: 1024 # Maximum number of tokens that can go through the model
+  max_prompt_len: 50 #Change or delete
+  dtype: bf16
+
+single_prompt: "Tell me a story."
+  
+  
+# harness:
+#   tasks:
+#     - hellaswag
+#     - task: boolq
+#       dataset_kwargs:
+#         trust_remote_code: true
+
+

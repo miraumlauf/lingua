@@ -160,6 +160,7 @@ class TikTokenTokenizer(Tokenizer):
         subs = []
         for i in range(0, len(s), TIKTOKEN_MAX_ENCODE_CHARS):
             subs.append(s[i : i + TIKTOKEN_MAX_ENCODE_CHARS])
+            
         return (
             [self.bos_id] * add_bos
             + sum(self.tkt_model.encode_ordinary_batch(subs), start=[])

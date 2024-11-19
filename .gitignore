@@ -5,6 +5,7 @@ slurm-*.out
 wandb
 apps/mtp/output_tiny/
 apps/mtp/output_tiny_single/
-
+babylm_data
+data_hf
 # Ignore Python cache directories
 __pycache__/

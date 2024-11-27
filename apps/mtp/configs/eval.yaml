@@ -1,6 +1,7 @@
-name: "debug_evals"
-ckpt_dir: "./apps/mtp/output_tiny/checkpoints/0000001000" 
-dump_dir: "./apps/mtp/output_tiny/eval_results"
+name: "generate_eval"
+dump_dir: "./apps/mtp/output_grammar"
+# metric_log_dir: str OPTIONAL
+ckpt_dir: "./apps/mtp/output_grammar_2_M/checkpoints/0000013200"
 generator:
   max_tokens: 8192
   dtype: bf16

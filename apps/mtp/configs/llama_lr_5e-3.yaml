@@ -1,13 +1,13 @@
-dump_dir: "./apps/mtp/output_grammar_full"  # Updated for grammar evaluation focus
-name: "grammar_test_2M"
-steps: 20_000
+dump_dir: "./apps/mtp/lr_5e-3"  # Updated for grammar evaluation focus
+name: "llama_lr_5e-3"
+steps: 50_000
 # probe_freq: null
 seed: 777
 
 optim:
-  lr: 2e-4 # changed from 3e-4
+  lr: 5e-3 # changed from 3e-4
   weight_decay: 0.01
-  warmup: 1000 # 500  # Adjusted to a higher warmup relative to total steps
+  warmup: 4000
   lr_min_ratio: 0.000001
   clip: 1.0 # changed from 10.0
 
@@ -20,8 +20,8 @@ distributed:
   tp_size: 1
 
 model:
-  dim: 512
-  n_layers: 4 
+  dim: 512 #CHANGE ?
+  n_layers: 8
   n_heads: 4
   n_future_head: 3
 

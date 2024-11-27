@@ -1,20 +1,21 @@
-name: "generate"
-dump_dir: "./apps/mtp/output_generate"
+name: "generate_grammar"
+dump_dir: "./apps/mtp/output_grammar"
 # metric_log_dir: str OPTIONAL
-ckpt_dir: "./apps/mtp/output_tiny/checkpoints/0000001000"
+#ckpt_dir: "./apps/mtp/output_grammar_2_M/checkpoints/0000013200"
+
 
 generator:
   # main.generate.PackedCausalTransformerGeneratorArgs
   temperature: 1.0
-  top_p: 0.95
-  top_k: 10
+  top_p: None
+  top_k: None
   max_gen_len: 100 # Maximum generation length
-  max_tokens: 1024 # Maximum number of tokens that can go through the model
-  max_prompt_len: 50 #Change or delete
+  max_tokens: 50 # Maximum number of tokens that can go through the model
+  max_prompt_len: 100 #Change1 or delete
   dtype: bf16
 
-single_prompt: "Tell me a story."
-  
+single_prompt: "Write a sentence about the sun"
+
   
 # harness:
 #   tasks:

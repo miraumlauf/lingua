@@ -325,10 +325,17 @@ class PackedCausalTransformerGenerator:
 
     @torch.inference_mode()
     def generate(self, prompts):
-        # Tokenize
+        # Tokenize 
         prompts = [
-            self.tokenizer.encode(p, add_bos=True, add_eos=False) for p in prompts
-        ]
+            self.tokenizer.encode(p, add_bos=True, add_eos=True) for p in prompts
+        ]# (changed add_eos=False)
+        
+        # CHANGED
+        print("Encoded prompts", prompts)
+        decoded_prompts = [self.tokenizer.decode(tokens) for tokens in prompts]
+        print("Decoded prompts", decoded_prompts)
+        # Changed END
+        
         # Truncate
         max_seqlen = (
             self.max_tokens

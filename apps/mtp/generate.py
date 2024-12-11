@@ -27,6 +27,7 @@ from lingua.args import dump_config
 from lingua.checkpoint import CONSOLIDATE_FOLDER, consolidate_checkpoints
 from lingua.distributed import DistributedArgs, get_global_rank, setup_torch_distributed
 
+
 # template for an eval folder name : -> zeros, 10 numbers, d -> integer
 EVAL_FOLDER_NAME = "{:010d}"
 
@@ -65,23 +66,34 @@ def launch_eval(cfg: EvalArgs): # cfg = config
         model_cls=LMTransformer,
         model_args_cls=LMMTPArgs,
     )
-    logger.info("Model loaded")
+    logger.info("Model and tokenizer loaded")
+    logger.info(f"Model Parameters: {sum(p.numel() for p in model.parameters())}")
+
     model.eval() # set model in evaluation mode (disables dropout layers and prepares the model for inference)
     generator = PackedCausalTransformerGenerator(cfg.generator, model, tokenizer)
-
-    # Single prompt generation -> no evaluation possible in this generation file
-    if cfg.single_prompt:
-        prompt = cfg.single_prompt
-        logger.info(f"Generating text for prompt: {prompt}")
-        output, _, _ = generator.generate([prompt])  # Single prompt as a list
-        print(f"Generated Output: {output[0]}")
+   
+    # Check if prompts are provided
+    if cfg.single_prompts:  # Assuming cfg.single_prompts is a list of strings
+        prompts = cfg.single_prompts  # Use the list of prompts directly
+        logger.info(f"Generating text for prompts: {prompts}")
+        
+        # Generate outputs for the batch of prompts
+        outputs, _, _ = generator.generate(prompts)  
+        
+        # Log and print outputs for each prompt
+        for i, (prompt, output) in enumerate(zip(prompts, outputs)):
+            logger.info(f"Prompt {i + 1}: {prompt}")
+            logger.info(f"Generated Output {i + 1}: {output}")
+            print(f"Prompt {i + 1}: {prompt}")
+            print(f"Generated Output {i + 1}: {output}")
+        
     else:
-
         print("No single prompt provided. Exiting launch_eval...")
         
     print ("Finishing launch_eval...")
     
     del generator
+    
 
 
 def main():
@@ -131,6 +143,7 @@ def main():
     default_cfg = OmegaConf.structured(EvalArgs())
     cfg = OmegaConf.merge(default_cfg, file_cfg, cli_args)
     cfg = OmegaConf.to_object(cfg)
+    print("Configuration", OmegaConf.to_yaml(cfg))
     launch_eval(cfg)
 
 

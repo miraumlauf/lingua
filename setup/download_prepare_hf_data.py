@@ -97,4 +97,4 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    main(args.dataset, args.memory, args.data_dir, args.seed, args.nchunks)
+    main(args.dataset, args.memory, args.data_dir, args.seed)

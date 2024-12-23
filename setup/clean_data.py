@@ -3,13 +3,12 @@ import re
 from pathlib import Path
 
 
-DATA_ROOT = Path("../")
-SEQ_LENGTH = 128
+DATA_ROOT = Path("./")
 DATA_SPLITS = ["babylm_100M", "babylm_dev"]
 
 # test if the data is available and path working
 for split in DATA_SPLITS:
-    input_dir = DATA_ROOT / "data" / split
+    input_dir = DATA_ROOT / "babylm_data" / split
     train_files = [
         f for f in input_dir.iterdir() if f.is_file() and f.suffix in [".train", ".dev"]
     ]
@@ -30,34 +29,42 @@ def cleanup_extra_spaces(input_text):
 def cleanup_simple_wikipedia(input_text):
     """Clean up Wikipedia input_text (replacing double line breaks with a single one)."""
     # input_text = re.sub(r"\n\n", "\n", input_text) # maybe not needed to keep text structure
+    # maybe remove coordinates?
     input_text = cleanup_extra_spaces(input_text)
     return input_text
-
 
 def cleanup_wikipedia(input_text):
     """Remove certain formatting from Wikipedia input_text."""
     input_text = re.sub(r"= = = (.+?) = = =\n", r"\1", input_text)
     lines = [line.strip() for line in input_text.splitlines()]
-    input_text = re.sub(r"\n\n", "\n", "\n".join(lines)[1:])  # needed?
-    input_text = cleanup_extra_spaces(input_text)
+    input_text = cleanup_extra_spaces("\n".join(lines))
     return input_text
 
 
-def cleanup_qed(input_text):
-    """Clean QED input_text by removing brackets and its content,
-    handling uppercase, (double, triple) punctuation and dashes.
-    Maybe think about removing non-words but then problem with math."""
 
-    punctuation_ex = re.compile(
-        r"([.!?]\s*)"
-    )  # Matches punctuation followed by any whitespace
-    unimportant_chars_ex = re.compile(
-        r"\(.*?\)|\[.*?\]"
-    )  # Matches any content within () or []
+
+def cleanup_qed(input_text):
+    """Clean QED input_text by removing:
+    - Lines between 15,000 and 19,209.
+    - Brackets and their content.
+    - Uppercase, (double, triple) punctuation, and dashes.
+    - All variations of &amp;gt;, &amp;amp;gt, etc.
+    - Entire substrings between two whitespaces if they contain 'amp;'.
+    """
+
+    # Split the input text into lines and filter out the specified range
+    lines = input_text.splitlines()
+    lines = [line for idx, line in enumerate(lines, start=1) if idx < 15000 or idx > 19209]
+
+    # Join back the filtered lines for further processing
+    input_text = "\n".join(lines)
+
+    punctuation_ex = re.compile(r"([.!?]\s*)")  # Matches punctuation followed by any whitespace
+    unimportant_chars_ex = re.compile(r"\(.*?\)|\[.*?\]")  # Matches any content within () or []
     dash_ex = re.compile(r"--")  # double or single dashes
-    repeated_punctuation_ex = re.compile(
-        r"([.!?]){2,}"
-    )  # two or more of the same punctuation mark
+    repeated_punctuation_ex = re.compile(r"([.!?]){2,}")  # two or more of the same punctuation mark
+    amp_gt_variants_ex = re.compile(r"&amp;gt;|&amp;amp;gt;?|&gt;|&amp;")  # Matches all variations of amp;gt
+    amp_in_words_ex = re.compile(r"\s\S*amp;\S*\s")  # Matches substrings with 'amp;' between whitespaces
 
     lines = []
     for line in input_text.splitlines():
@@ -65,6 +72,12 @@ def cleanup_qed(input_text):
         line = dash_ex.sub("", line)  # Remove double dashes
         line = unimportant_chars_ex.sub("", line)  # Remove any content within () or []
         line = repeated_punctuation_ex.sub(r"\1", line)  # Remove repeated punctuation
+
+        # Remove all variations of &amp;gt, &gt, etc.
+        line = amp_gt_variants_ex.sub("", line)
+
+        # Remove substrings containing 'amp;' between two whitespaces
+        line = amp_in_words_ex.sub(" ", line)
 
         # Only proceed if there's content in line after cleanup
         if line.strip():
@@ -81,10 +94,12 @@ def cleanup_qed(input_text):
     return cleanup_extra_spaces(cleaned_text)  # apply extra space cleanup
 
 
+
+
 def cleanup_bnc_spoken(input_text):
     """Clean BNC spoken data by removing extra spaces and double newlines."""
     input_text = cleanup_extra_spaces(input_text)
-    input_text = re.sub(r"\n\n", "\n", input_text)  # needed because speech
+    # input_text = re.sub(r"\n\n", "\n", input_text)  # needed because speech
     return input_text
 
 
@@ -177,9 +192,9 @@ CLEANUP_FUNCTIONS = {
 if __name__ == "__main__":
     # Clean up the data
     for split in DATA_SPLITS:
-        INPUT_DIR = DATA_ROOT / "data" / split
-        OUTPUT_DIR = DATA_ROOT / "data" / f"{split}_clean"
-        OUTPUT_DIR.mkdir(exist_ok=True)
+        INPUT_DIR = DATA_ROOT / "babylm_data" / split
+        OUTPUT_DIR = DATA_ROOT / "babylm_data_clean" / f"{split}_clean"
+        OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
         train_files = [
             f
@@ -188,7 +203,7 @@ if __name__ == "__main__":
         ]
         for file in train_files:
             text = file.read_text()
-            cleaned_text = CLEANUP_FUNCTIONS[file.stem](text, SEQ_LENGTH)
+            cleaned_text = CLEANUP_FUNCTIONS[file.stem](text)
             (OUTPUT_DIR / file.name).write_text(cleaned_text)
             print(
                 f"🧹 Cleaned '{file.name}' (size {len(text)} -> {len(cleaned_text)}) in {split}"

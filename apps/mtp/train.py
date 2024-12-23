@@ -343,6 +343,10 @@ def train(args: TrainArgs):
         nwords_since_last_log = 0
         time_last_log = timer()
         gc.collect()
+        
+        ## CHANGED
+        total_tokens_processed = 0  # Initialize total token counter
+
         while train_state.step < args.steps:
             # We constrain train_state.acc_step to be in range 0 to args.grad_acc_steps - 1
             train_state.acc_step += 1
@@ -368,13 +372,15 @@ def train(args: TrainArgs):
             
             # CHANGED: PRINT INSERTED
             # Print shapes to verify dimensions
-            print("Input IDs Shape:", input_ids.shape)  # Should show (batch_size, sequence_length)
-            print("Labels Shape:", labels.shape)        # Should show (batch_size, sequence_length, n_future_tokens)
+            # print("Input IDs Shape:", input_ids.shape)  # Should show (batch_size, sequence_length)
+            # print("Labels Shape:", labels.shape)        # Should show (batch_size, sequence_length, n_future_tokens)
 
             # Print a few sample token sequences (first two in batch for simplicity)
             # for i in range(2):  # Adjust the range as needed
             #     print(f"Input Tokens [{i}]:", input_ids[i].cpu().tolist())  # Detach and move to CPU for printing
             #     print(f"Label Tokens [{i}]:", labels[i].cpu().tolist())
+
+            total_tokens_processed += input_ids.numel()  # Add token count to total
 
             # CHANGE END
             
@@ -537,6 +543,7 @@ def train(args: TrainArgs):
                     f"  lr: {curr_lr:.2e}"
                     f"  mem: {gpu_mem_stats.max_active_pct:.0f}%"
                     f"  pow: {gpu_mem_stats.power_draw/1000} W"
+                    f"  Tokens processed: {total_tokens_processed:,}"
                 )
 
             saved = False

@@ -1,20 +1,18 @@
-name: "generate_grammar"
-dump_dir: "./apps/mtp/output_grammar"
+name: "generate_llama"
+dump_dir: "./apps/mtp/dump"
 # metric_log_dir: str OPTIONAL
-#ckpt_dir: "./apps/mtp/output_grammar_2_M/checkpoints/0000013200"
+ckpt_dir: "./apps/mtp/llama_babylm_small/checkpoints/0000003000"
 
 
 generator:
   # main.generate.PackedCausalTransformerGeneratorArgs
   temperature: 1.0
-  top_p: None
-  top_k: None
-  max_gen_len: 100 # Maximum generation length
-  max_tokens: 50 # Maximum number of tokens that can go through the model
-  max_prompt_len: 100 #Change1 or delete
+  top_p: 0.95
+  max_gen_len: 150 # Maximum generation length
+  max_tokens: 1024 # Maximum number of tokens that can go through the model
   dtype: bf16
 
-single_prompt: "Write a sentence about the sun"
+single_prompts: ["What do you like?", "What are your hobbies?", "Tell me about a holiday.", "Complete the sentence: The dog is..."]
 
   
 # harness:

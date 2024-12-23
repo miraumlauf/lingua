@@ -1,0 +1,68 @@
+dump_dir: "./apps/mtp/fineweb_checkpoint"  # Updated for grammar evaluation focus
+name: "llama_fineweb_checkpoint"
+steps: 20_000
+# probe_freq: null ANSCHAUEN !!!
+seed: 777
+
+optim:
+  lr: 1e-3 # changed from 3e-4
+  weight_decay: 0.01
+  warmup: 400
+  lr_min_ratio: 0.000001
+  clip: 1.0 
+
+distributed:
+  fsdp_type: full_shard
+  compile: true
+  model_dtype: bf16
+  matmul_allow_tf32: false
+  selective_activation_checkpointing: false
+  tp_size: 1
+
+model:
+  dim: 512
+  n_layers: 8
+  n_heads: 4
+  n_future_head: 3
+
+data:
+  root_dir: "./data_fineweb"
+  sources:
+    fineweb_edu: 100.0
+  batch_size: 4 #8 
+  prefetch_size: 16
+  seq_len: 512
+  n_views: 4
+  load_async: true
+  add_bos: true # need to be in training?
+  add_eos: true
+  tokenizer:
+    name: tiktoken
+    path: "./tokenizers/llama3/original/tokenizer.model"
+
+profiling:
+  run: true
+  # mem_warmup: 0
+  # mem_steps: 4
+  # profile_warmup: 100
+  # profile_steps: 4
+
+checkpoint:
+  dump:
+    every: 500
+    keep: 2
+  eval:
+    every: 500
+    keep: 2
+
+logging:
+  freq: 20  # Moderate logging frequency to focus on significant updates
+
+# async_eval_gpus: 1  # Reduced for small-scale testing
+
+# eval:
+#   generator:
+#     max_tokens: 1024  # Increased to allow evaluation of longer sentence outputs
+#     dtype: bf16
+#     temperature: 0.8  # Adjusted to encourage diverse yet coherent outputs
+#     top_p: 0.95

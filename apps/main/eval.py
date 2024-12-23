@@ -67,15 +67,14 @@ class EvalArgs:
         default_factory=PackedCausalTransformerGeneratorArgs
     )
     ###CHANGED
-    single_prompts: Optional[list] = None
-    # # Harness Arguments from class LMHarnessArgs (above) (comment out maybe ) 
-    #harness: Optional[LMHarnessArgs] = field(default_factory=LMHarnessArgs)
+    # single_prompts: Optional[list] = None
+    # Harness Arguments from class LMHarnessArgs (above) (comment out maybe ) 
+    harness: Optional[LMHarnessArgs] = field(default_factory=LMHarnessArgs)
 
-    # #Integration with weights & biases: If provided, evaluation results could be logged to wandb
-    #wandb: Optional[Any] = None
+    #Integration with weights & biases: If provided, evaluation results could be logged to wandb
+    wandb: Optional[Any] = None
 
-    #global_step: Optional[int] = None  # tracks the training step for in-training evaluation
-    ####CHANGED END
+    global_step: Optional[int] = None  # tracks the training step for in-training evaluation
 
 def all_dicts_same(dict_list):
     if not dict_list:  # Check if the list is empty

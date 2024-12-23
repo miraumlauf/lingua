@@ -15,18 +15,18 @@ harness:
         trust_remote_code: true
     - task: nq_open
       num_fewshot: 5
-  # - piqa
-  # - siqa
-  # - tqa
-  # - winogrande
-  # - obqa
-  # - arc_easy
-  # - arc_challenge
-  # - race_middle
-  # - race_high
-  # - gsm8k
-  # - bbh
-  # - copa
-  # - human_eval_plus
-  # - mbpp
-  # - mmlu
+  - piqa
+  - siqa
+  - tqa
+  - winogrande
+  - obqa
+  - arc_easy
+  - arc_challenge
+  - race_middle
+  - race_high
+  - gsm8k
+  - bbh
+  - copa
+  - human_eval_plus
+  - mbpp
+  - mmlu

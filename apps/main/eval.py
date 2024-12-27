@@ -18,7 +18,8 @@ from apps.main.generate import (
     PackedCausalTransformerGeneratorArgs,
     load_consolidated_model_and_tokenizer,
 )
-from apps.main.transformer import LMTransformer, LMTransformerArgs
+#from apps.main.transformer import LMTransformer, LMTransformerArgs
+from apps.mtp.transformer import LMTransformer, LMMTPArgs
 from lingua.args import dump_config
 from lingua.checkpoint import CONSOLIDATE_FOLDER, consolidate_checkpoints
 from lingua.data import init_choice_state, setup_sources
@@ -107,6 +108,7 @@ class MockAccelerator:
 
 
 # Light wrapper around generator for lm-eval harness
+# imported
 class EvalHarnessLM(LM):
     def __init__(self, generator):
         super().__init__()
@@ -165,7 +167,7 @@ class EvalHarnessLM(LM):
 
         return results
     
-
+# called in launch_eval therefore not imported!
 def eval_on_val(generator, val_args: ValidationArgs, train_cfg):
     srcs = {}
     for src in val_args.sources:
@@ -242,7 +244,7 @@ def launch_eval(cfg: EvalArgs):
     model, tokenizer, train_cfg = load_consolidated_model_and_tokenizer(
         consolidate_path,
         model_cls=LMTransformer,
-        model_args_cls=LMTransformerArgs,
+        model_args_cls=LMMTPArgs,
     )
     logger.info("Model loaded")
     model.eval()

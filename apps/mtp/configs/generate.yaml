@@ -1,15 +1,15 @@
 name: "generate_llama"
 dump_dir: "./apps/mtp/dump"
 # metric_log_dir: str OPTIONAL
-ckpt_dir: "./apps/mtp/llama_babylm_small/checkpoints/0000003000"
+ckpt_dir: "./apps/mtp/llama_babylm_small/checkpoints/0000003500"
 
 
 generator:
   # main.generate.PackedCausalTransformerGeneratorArgs
   temperature: 1.0
   top_p: 0.95
-  max_gen_len: 150 # Maximum generation length
-  max_tokens: 1024 # Maximum number of tokens that can go through the model
+  max_gen_len: 512 # Maximum generation length
+  max_tokens: 512 # Maximum number of tokens that can go through the model
   dtype: bf16
 
 single_prompts: ["What do you like?", "What are your hobbies?", "Tell me about a holiday.", "Complete the sentence: The dog is..."]

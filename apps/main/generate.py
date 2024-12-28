@@ -127,7 +127,7 @@ class PackedCausalTransformerGeneratorArgs:
     top_p: Optional[float] = None
     top_k: Optional[float] = None
     max_gen_len: int = 512  # Maximum number of tokens to generate
-    max_tokens: int = 1024  # Maximum number of tokens that can go through the model
+    max_tokens: int = 1024 #  changed from 1024  # Maximum number of tokens that can go through the model
     max_prompt_len: Optional[int] = None
     until: List[str] = field(default_factory=list)
     compile_prefilling: bool = False
@@ -331,9 +331,9 @@ class PackedCausalTransformerGenerator:
         ]# (changed add_eos=False)
         
         # CHANGED
-        print("Encoded prompts", prompts)
+        #print("Encoded prompts", prompts)
         decoded_prompts = [self.tokenizer.decode(tokens) for tokens in prompts]
-        print("Decoded prompts", decoded_prompts)
+        #print("Decoded prompts", decoded_prompts)
         # Changed END
         
         # Truncate

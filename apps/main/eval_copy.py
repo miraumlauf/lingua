@@ -18,8 +18,8 @@ from apps.main.generate import (
     PackedCausalTransformerGeneratorArgs,
     load_consolidated_model_and_tokenizer,
 )
-#from apps.main.transformer import LMTransformer, LMTransformerArgs
-from apps.mtp.transformer import LMTransformer, LMMTPArgs
+from apps.main.transformer import LMTransformer, LMTransformerArgs
+
 from lingua.args import dump_config
 from lingua.checkpoint import CONSOLIDATE_FOLDER, consolidate_checkpoints
 from lingua.data import init_choice_state, setup_sources
@@ -78,7 +78,7 @@ class EvalArgs:
         default_factory=PackedCausalTransformerGeneratorArgs
     )
     ###CHANGED
-    #single_prompts: Optional[list] = None
+    # single_prompts: Optional[list] = None
     # Harness Arguments from class LMHarnessArgs (above) (comment out maybe ) 
     harness: Optional[LMHarnessArgs] = field(default_factory=LMHarnessArgs)
     validation: Optional[ValidationArgs] = field(default_factory=ValidationArgs)
@@ -170,44 +170,19 @@ class EvalHarnessLM(LM):
 # called in launch_eval therefore not imported!
 def eval_on_val(generator, val_args: ValidationArgs, train_cfg):
     srcs = {}
-    
     for src in val_args.sources:
         path = os.path.join(val_args.root_dir, src)
-        if any(Path(path).glob("*.val.jsonl")):  # Check if there are valid chunks
-            srcs[path] = 1.0
-        else:
-            logger.warning(f"No valid chunks found in {path}, skipping this source.")
-
+        srcs[path] = 1.0
     for src in train_cfg.data.sources:
         path = os.path.join(train_cfg.data.root_dir, src)
-        if any(Path(path).glob("*.val.jsonl")):  # Check if there are valid chunks
-            srcs[path] = 1.0
-        else:
-            logger.warning(f"No valid chunks found in {path}, skipping this source.")
-
-    if not srcs:
-        logger.warning("No sources with valid chunks found. Skipping validation.")
-        return {}
-
-    ### Changed
-    # for src in val_args.sources:
-    #     path = os.path.join(val_args.root_dir, src)
-    #     srcs[path] = 1.0
-    # for src in train_cfg.data.sources:
-    #     path = os.path.join(train_cfg.data.root_dir, src)
-    #     srcs[path] = 1.0
-        
-    #### Changed
-    
-    print(f"Constructed srcs: {srcs}")
+        srcs[path] = 1.0
 
     multi_state = init_choice_state("", srcs, 0, get_global_rank(), get_world_size(), "*.val.jsonl")
     path_to_iter = setup_sources(multi_state)
 
     max_gen_len = generator.max_gen_len
     # We temporarily lower max gen len
-    #CHANGED!!!
-    generator.max_gen_len = 512 #changed from 1
+    generator.max_gen_len = 1
 
     all_val_metrics = {}
     for src in path_to_iter:
@@ -219,12 +194,9 @@ def eval_on_val(generator, val_args: ValidationArgs, train_cfg):
                 break
             content_key = "text" if ("text" in content) else "content"
             texts.append(content[content_key])
-        # print first _ = generation see generator generation
-        generation, loglikelihood, _ = generator.generate(texts)
+        
+        _, loglikelihood, _ = generator.generate(texts)
 
-        for i, output in enumerate(generation):
-            print(f"Output {i + 1}: {output}")
-            
         metrics = defaultdict(list)
         for i, ll in enumerate(loglikelihood):
             tmp = ll.sum().item()
@@ -272,7 +244,7 @@ def launch_eval(cfg: EvalArgs):
     model, tokenizer, train_cfg = load_consolidated_model_and_tokenizer(
         consolidate_path,
         model_cls=LMTransformer,
-        model_args_cls=LMMTPArgs,
+        model_args_cls=LMTransformerArgs,
     )
     logger.info("Model loaded")
     model.eval()

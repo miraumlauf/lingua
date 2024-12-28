@@ -37,7 +37,6 @@ logger = logging.getLogger()
 # takes Eval Args from main.eval (-> config) -> EvalArgs HAS TO BE MODIFIED
 def launch_eval(cfg: EvalArgs): # cfg = config
     
-    
     # ensures PyTorch distributed computing is initialized and consolidates if necessary
     if not torch.distributed.is_initialized():
         setup_torch_distributed(DistributedArgs())
@@ -61,7 +60,7 @@ def launch_eval(cfg: EvalArgs): # cfg = config
     logger.info("Loading model")
     # Loading Model and Tokenizer from consolidated checkpoint
     # imported from MTP Transformer
-    model, tokenizer = load_consolidated_model_and_tokenizer(
+    model, tokenizer, _ = load_consolidated_model_and_tokenizer(
         consolidate_path,
         model_cls=LMTransformer,
         model_args_cls=LMMTPArgs,

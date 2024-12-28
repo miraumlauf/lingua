@@ -1,7 +1,7 @@
 name: "generate_eval"
-dump_dir: "./apps/mtp/output_grammar"
+dump_dir: "./apps/llama_dump_try"
 # metric_log_dir: str OPTIONAL
-ckpt_dir: "./apps/mtp/output_grammar_2_M/checkpoints/0000013200"
+ckpt_dir: "./apps/mtp/llama_babylm/checkpoints/0000020000"
 generator:
   max_tokens: 8192
   dtype: bf16
@@ -13,20 +13,27 @@ harness:
     - task: boolq
       dataset_kwargs:
         trust_remote_code: true
-    - task: nq_open
-      num_fewshot: 5
-  - piqa
-  - siqa
-  - tqa
-  - winogrande
-  - obqa
-  - arc_easy
-  - arc_challenge
-  - race_middle
-  - race_high
-  - gsm8k
-  - bbh
-  - copa
-  - human_eval_plus
-  - mbpp
-  - mmlu
+    # - task: nq_open
+    #   num_fewshot: 5
+    # - piqa
+#     - task: social_iqa
+#       dataset_kwargs:
+#         trust_remote_code: true
+#     - triviaqa
+#     - winogrande
+#     - openbookqa
+#     - arc_easy
+#     - arc_challenge
+#     - race
+#     - commonsense_qa
+#     # - coqa
+#     - copa
+#     - gsm8k
+#     - bbh
+#     - mmlu
+#     - mmlu_pro
+validation:
+  max_steps: 2000
+  root_dir: ./babylm_data_json
+  sources:
+    - babylm_val_clean_json

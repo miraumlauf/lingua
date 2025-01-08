@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=babylm_training_1
+#SBATCH --job-name=babylm_batch_e-3
 #SBATCH --nodes=1
 #SBATCH --ntasks=4
 #SBATCH --cpus-per-task=4
@@ -20,6 +20,8 @@ export TORCH_DISTRIBUTED_DEBUG=DETAIL
 # Run Debug 
 #python -m apps.mtp.train config=apps/mtp/configs/debug.yaml
 # torchrun --nproc-per-node=4 -m apps.mtp.train config=apps/mtp/configs/llama_lr_8e-3.yaml
-torchrun --nproc-per-node=4 -m apps.mtp.train config=apps/mtp/llama_babylm/config.yaml
+torchrun --nproc-per-node=4 -m apps.mtp.train config=apps/mtp/llama_babylm_lr_min/config.yaml
+#torchrun --nproc-per-node=4 -m apps.mtp.train config=apps/mtp/configs/llama_babylm.yaml
 
-echo "MTP training job partly completed ✔️"
+
+echo "Change to config in dump dir! ✔️"

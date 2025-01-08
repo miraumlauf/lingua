@@ -11,8 +11,7 @@ cuda_12.6.3_560.35.05_linux.run
 apps/mtp/fineweb_checkpoint/
 apps/mtp/fineweb_llama_output/
 apps/mtp/lr_1e-3
-apps/mtp/llama_babylm_small
-apps/mtp/llama_babylm
+apps/mtp/llama*
 
 # Ignore Data Directories
 babylm_data

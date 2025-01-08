@@ -207,7 +207,7 @@ def eval_on_val(generator, val_args: ValidationArgs, train_cfg):
     max_gen_len = generator.max_gen_len
     # We temporarily lower max gen len
     #CHANGED!!!
-    generator.max_gen_len = 512 #changed from 1
+    generator.max_gen_len = 1 #changed from 1
 
     all_val_metrics = {}
     for src in path_to_iter:

@@ -13,6 +13,13 @@ apps/mtp/fineweb_llama_output/
 apps/mtp/lr_1e-3
 apps/mtp/llama*
 
+
+upload
+llama_model
+metrics
+example_model
+apps/mtp/dump
+
 # Ignore Data Directories
 babylm_data
 babylm_data_clean

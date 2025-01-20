@@ -60,7 +60,7 @@ def launch_eval(cfg: EvalArgs): # cfg = config
     logger.info("Loading model")
     # Loading Model and Tokenizer from consolidated checkpoint
     # imported from MTP Transformer
-    model, tokenizer, _ = load_consolidated_model_and_tokenizer(
+    model, tokenizer= load_consolidated_model_and_tokenizer(
         consolidate_path,
         model_cls=LMTransformer,
         model_args_cls=LMMTPArgs,

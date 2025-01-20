@@ -127,7 +127,7 @@ class PackedCausalTransformerGeneratorArgs:
     top_p: Optional[float] = None
     top_k: Optional[float] = None
     max_gen_len: int = 512  # Maximum number of tokens to generate
-    max_tokens: int = 1024 #  changed from 1024  # Maximum number of tokens that can go through the model
+    max_tokens: int = 1024  # Maximum number of tokens that can go through the model
     max_prompt_len: Optional[int] = None
     until: List[str] = field(default_factory=list)
     compile_prefilling: bool = False
@@ -158,11 +158,8 @@ class PackedCausalTransformerGenerator:
         This class creates a fixed size cache of size max_tokens or sum of prompt sizes
         + the max number of generated tokens per sequence.
         """
-        # store model & tokenizer
         self.model = model
         self.tokenizer = tokenizer
-        
-        # initialize configurations parameters
         self.temperature = cfg.temperature
         self.top_p = cfg.top_p
         self.top_k = cfg.top_k
@@ -174,7 +171,7 @@ class PackedCausalTransformerGenerator:
         self.max_until_size = max([len(e) for e in self.until]) if self.until else 1
         self.device = cfg.device
 
-        # Compile if necessary (methods for optimization)
+        # Compile if necessary
         self.prefill = torch.compile(self.prefill, disable=not cfg.compile_prefilling)
         self.generate_next_token = torch.compile(
             self.generate_next_token,
@@ -182,10 +179,9 @@ class PackedCausalTransformerGenerator:
             disable=not cfg.reduce_generation_overhead,
         )
 
-        self.show_progress = cfg.show_progress # display a progress bar during generation
-        self.dtype = dict(fp32=torch.float32, bf16=torch.bfloat16)[cfg.dtype] # data type for computation
+        self.show_progress = cfg.show_progress
+        self.dtype = dict(fp32=torch.float32, bf16=torch.bfloat16)[cfg.dtype]
 
-        # Cache Managment Variables
         self.prefill_doc_id, self.prefill_tok_id = None, None
         self.padded_doc_id, self.padded_tok_id = None, None
         self.current_doc_id, self.current_tok_id = None, None
@@ -325,13 +321,13 @@ class PackedCausalTransformerGenerator:
 
     @torch.inference_mode()
     def generate(self, prompts):
-        # Tokenize 
+        # Tokenize
         prompts = [
-            self.tokenizer.encode(p, add_bos=True, add_eos=True) for p in prompts
-        ]# (changed add_eos=False)
+            self.tokenizer.encode(p, add_bos=True, add_eos=False) for p in prompts
+        ]
         
         # CHANGED
-        #print("Encoded prompts", prompts)
+        print("Encoded prompts", prompts)
         decoded_prompts = [self.tokenizer.decode(tokens) for tokens in prompts]
         #print("Decoded prompts", decoded_prompts)
         # Changed END
@@ -431,7 +427,7 @@ def load_consolidated_model_and_tokenizer(
     model = model.cuda().eval()
     for param in model.parameters():
         param.data = param.data.to(dtype=param_dtype)
-    return model, tokenizer, config
+    return model, tokenizer
 
 
 def main():
@@ -442,7 +438,7 @@ def main():
     )
     print(cfg)
 
-    model, tokenizer, _ = load_consolidated_model_and_tokenizer(cfg.ckpt)
+    model, tokenizer = load_consolidated_model_and_tokenizer(cfg.ckpt)
 
     generator = PackedCausalTransformerGenerator(gen_cfg, model, tokenizer)
 

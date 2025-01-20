@@ -51,7 +51,7 @@ def plot_metrics(steps, losses, grads, lrs, output_file):
     ax2.legend(loc="upper center", fontsize=10)
     ax3.legend(loc="upper right", fontsize=10)
 
-    plt.title("Dim=256/Batch=64 Experiment: LR=3e-3")
+    plt.title("Dim=256/Batch=64 Experiment: LR=3e-3, lr min ratio")
     
     # Save the plot as a PNG file
     plt.savefig(output_file, bbox_inches="tight")
@@ -60,8 +60,8 @@ def plot_metrics(steps, losses, grads, lrs, output_file):
 # Main logic
 if __name__ == "__main__":
     # Update the path to your train.log file here
-    file_path = "./apps/mtp/llama_babylm_3e-3/train.log"
-    output_file = "./metrics/metrics_dim_256_lr_3e-3.png"  # The name of the output PNG file
+    file_path = "./apps/mtp/llama_babylm_lr_min/train.log"
+    output_file = "./metrics/metrics_dim_256_lr_min.png"  # The name of the output PNG file
     steps, losses, grads, lrs = parse_train_log(file_path)
     if steps and losses and grads and lrs:
         plot_metrics(steps, losses, grads, lrs, output_file)

@@ -1,7 +1,7 @@
 name: "generate_llama"
 dump_dir: "./apps/mtp/dump"
 # metric_log_dir: str OPTIONAL
-ckpt_dir: "./apps/mtp/llama_babylm_small/checkpoints/0000003500"
+ckpt_dir: "./apps/mtp/llama_babylm_lr_min/checkpoints/0000009000"
 
 
 generator:
@@ -12,7 +12,7 @@ generator:
   max_tokens: 512 # Maximum number of tokens that can go through the model
   dtype: bf16
 
-single_prompts: ["What do you like?", "What are your hobbies?", "Tell me about a holiday.", "Complete the sentence: The dog is..."]
+single_prompts: ["Amanda was", "I am", "Lisa is"]
 
   
 # harness:

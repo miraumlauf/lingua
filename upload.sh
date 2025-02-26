@@ -19,8 +19,15 @@ source activate lingua_241105
 # export NCCL_DEBUG=INFO  
 
 # Run on a single GPU without torchrun
-#python -m convert_llama_to_hf config=apps/mtp/configs/config_upload.yaml
-python -m convert_lingua_to_hf_llama config=apps/mtp/configs/config_upload.yaml
+#python -m convert_lingua_to_hf_llama config=apps/mtp/configs/config_upload.yaml
+
+#python -m test_generation_local config=apps/mtp/configs/config_upload.yaml
+
+#python -m convert_to_hf config=apps/mtp/configs/config_upload.yaml
 #python -m test_generation
+#python -m test_training
+python -m test_sequence
+
+#python -m huggingface.lingua_model
 
 echo "Upload Test finished"

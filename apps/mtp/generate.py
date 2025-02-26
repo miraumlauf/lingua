@@ -22,6 +22,10 @@ from apps.main.generate import (
 )
 # app imports from mtp.transformer
 from apps.mtp.transformer import LMTransformer, LMMTPArgs
+
+# try with ntp  model
+from apps.main.transformer import LMTransformer, LMTransformerArgs
+
 # lingua imports (modules)
 from lingua.args import dump_config
 from lingua.checkpoint import CONSOLIDATE_FOLDER, consolidate_checkpoints
@@ -60,6 +64,8 @@ def launch_eval(cfg: EvalArgs): # cfg = config
     logger.info("Loading model")
     # Loading Model and Tokenizer from consolidated checkpoint
     # imported from MTP Transformer
+    
+    # For NTP prediction change to args to LMTransformerArgs
     model, tokenizer= load_consolidated_model_and_tokenizer(
         consolidate_path,
         model_cls=LMTransformer,

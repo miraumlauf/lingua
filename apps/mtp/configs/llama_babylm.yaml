@@ -1,5 +1,5 @@
-dump_dir: "./apps/mtp/llama_babylm_lr_min"  
-name: llama_babylm_batch_lr_min
+dump_dir: "./apps/mtp/ntp_llama"  
+name: ntp_llama
 steps: 10_000 # one epoch is 3051 steps with batch_size: 16!
 seed: 777
 
@@ -7,7 +7,7 @@ optim:
   lr: 3e-3
   weight_decay: 0.033 
   warmup: 1000 #~5% of total steps for gradual learning rate increase from 1000
-  lr_min_ratio: 0.000001
+  lr_min_ratio: 0.000001 #1e-6
   clip: 1.0
 
 distributed:
@@ -22,7 +22,7 @@ model:
   dim: 256
   n_layers: 4
   n_heads: 8
-  n_future_head: 3
+  n_future_head: 1
 
 data:
   root_dir: ./babylm_data_json

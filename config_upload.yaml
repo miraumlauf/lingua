@@ -2,5 +2,5 @@ username: umlauf
 repo_name: llama_lr
 name: upload_model
 dump_dir: upload
-ckpt_dir: ./apps/mtp/llama_babylm_lr_min/checkpoints/0000009000
-model_dir: ../example_model/
+ckpt_dir: ./apps/mtp/llama_128/checkpoints/0000015300
+

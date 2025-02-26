@@ -1,6 +1,6 @@
-dump_dir: "./apps/mtp/llama_768"  
-name: llama_768
-steps: 15_300 # 20 epochs
+dump_dir: "./apps/mtp/llama_256_4fh"  
+name: llama_256_4fh
+steps: 15_300 # one epoch is 3051 steps with batch_size: 16!
 seed: 777
 
 optim:
@@ -19,10 +19,10 @@ distributed:
   tp_size: 1
 
 model:
-  dim: 768
-  n_layers: 14
-  n_heads: 12
-  n_future_head: 3
+  dim: 256
+  n_layers: 4
+  n_heads: 8
+  n_future_head: 4
 
 data:
   root_dir: ./babylm_data_json
@@ -31,7 +31,7 @@ data:
   batch_size: 64
   prefetch_size: 256 #how many batches of data are loaded into memory in advance -> maybe increase?
   seq_len: 512
-  n_views: 4 # because always:`n_future_head == n_views - 1`
+  n_views: 5 # because always:`n_future_head == n_views - 1`
   load_async: true
   add_bos: true
   add_eos: true

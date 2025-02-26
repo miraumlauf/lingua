@@ -1,14 +1,13 @@
-dump_dir: "./apps/mtp/llama_babylm_384"  
-name: llama_babylm_384
-steps: 10_000 # one epoch is 3051 steps after the formula from git -> 6 epochs like babyllama ca. 19.000 steps
-probe_freq: null
+dump_dir: "./apps/mtp/llama_384"  
+name: llama_384
+steps: 15_300 # 20 epochs
 seed: 777
 
 optim:
-  lr: 3e-5
+  lr: 3e-3
   weight_decay: 0.033 
   warmup: 1000 #~5% of total steps for gradual learning rate increase from 1000
-  lr_min_ratio: 0.03
+  lr_min_ratio: 0.000001 # 1e-6
   clip: 1.0
 
 distributed:
@@ -29,8 +28,8 @@ data:
   root_dir: ./babylm_data_json
   sources:
     babylm_100M_clean_json: 1.0
-  batch_size: 16
-  prefetch_size: 16 #how many batches of data are loaded into memory in advance -> maybe increase?
+  batch_size: 64
+  prefetch_size: 256 #how many batches of data are loaded into memory in advance -> maybe increase?
   seq_len: 512
   n_views: 4 # because always:`n_future_head == n_views - 1`
   load_async: true
@@ -49,8 +48,8 @@ profiling:
 
 checkpoint:
   dump:
-    every: 500
-    keep: 3
+    every: 3000
+    keep: 5
   eval:
     every: 5000
     keep: -1

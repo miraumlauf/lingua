@@ -1,7 +1,8 @@
-name: "generate_llama"
-dump_dir: "./apps/mtp/dump"
+name: "generate_ntp_llama"
+dump_dir: "./apps/main/dump"
 # metric_log_dir: str OPTIONAL
-ckpt_dir: "./apps/mtp/llama_babylm_lr_min/checkpoints/0000009000"
+ckpt_dir: "./apps/main/ntp_llama_128/checkpoints/0000015300"
+#
 
 
 generator:
@@ -12,7 +13,7 @@ generator:
   max_tokens: 512 # Maximum number of tokens that can go through the model
   dtype: bf16
 
-single_prompts: ["Amanda was", "I am", "Lisa is"]
+single_prompts: ["The meaning of life is", "I am", "Lisa is"]
 
   
 # harness:

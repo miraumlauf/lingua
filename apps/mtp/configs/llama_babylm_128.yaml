@@ -1,6 +1,6 @@
-dump_dir: "./apps/mtp/llama_768"  
-name: llama_768
-steps: 15_300 # 20 epochs
+dump_dir: "./apps/mtp/llama_128"  
+name: llama_128
+steps: 15_300 # one epoch is 3051 steps with batch_size: 16!
 seed: 777
 
 optim:
@@ -19,9 +19,9 @@ distributed:
   tp_size: 1
 
 model:
-  dim: 768
-  n_layers: 14
-  n_heads: 12
+  dim: 128
+  n_layers: 5
+  n_heads: 4
   n_future_head: 3
 
 data:

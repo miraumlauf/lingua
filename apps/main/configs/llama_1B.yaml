@@ -37,7 +37,7 @@ data:
   add_eos: true
   tokenizer:
     name: tiktoken
-    path: tokenizers/cl_toplang_128k.tiktoken
+    path: "./tokenizers/llama3/original/tokenizer.model"
 
 profiling:
   run: true
@@ -48,8 +48,8 @@ profiling:
 
 checkpoint:
   dump:
-    every: 2500
-    keep: 3
+    every: 3000
+    keep: 5
   eval:
     every: 5000
     keep: -1
@@ -57,31 +57,31 @@ checkpoint:
 logging:
   freq: 1
 
-async_eval_gpus: 8
-eval:
-  harness:
-    tasks:
-      - hellaswag
-      - task: boolq
-        dataset_kwargs:
-          trust_remote_code: true
-      - piqa
-      - task: social_iqa
-        dataset_kwargs:
-          trust_remote_code: true
-      - winogrande
-      - openbookqa
-      - arc_easy
-      - arc_challenge
-      - race
-      - commonsense_qa
-      - copa
-      # - coqa
-      # - task: nq_open
-      #   num_fewshot: 5
-      # - triviaqa
-  validation:
-    max_steps: 1000
-  generator:
-    max_tokens: 16384
-    dtype: bf16
+# async_eval_gpus: 8
+# eval:
+#   harness:
+#     tasks:
+#       - hellaswag
+#       - task: boolq
+#         dataset_kwargs:
+#           trust_remote_code: true
+#       - piqa
+#       - task: social_iqa
+#         dataset_kwargs:
+#           trust_remote_code: true
+#       - winogrande
+#       - openbookqa
+#       - arc_easy
+#       - arc_challenge
+#       - race
+#       - commonsense_qa
+#       - copa
+#       # - coqa
+#       # - task: nq_open
+#       #   num_fewshot: 5
+#       # - triviaqa
+#   validation:
+#     max_steps: 1000
+#   generator:
+#     max_tokens: 16384
+#     dtype: bf16

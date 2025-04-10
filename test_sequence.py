@@ -8,7 +8,7 @@ from huggingface_hub import login
 HUGGINGFACE_TOKEN = "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"
 login(token=HUGGINGFACE_TOKEN)
 
-repo_name = "umlauf/llama_sequence_128_15300"
+repo_name = "umlauf/lingua_3fh_sequence_128_15300"
 
 
 model = AutoModelForSequenceClassification.from_pretrained(repo_name, trust_remote_code=True)

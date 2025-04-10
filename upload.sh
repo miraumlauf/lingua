@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=upload_test
+#SBATCH --job-name=upload_128_9000
 #SBATCH --nodes=1
 #SBATCH --ntasks=1          
 #SBATCH --cpus-per-task=1
@@ -24,9 +24,11 @@ source activate lingua_241105
 #python -m test_generation_local config=apps/mtp/configs/config_upload.yaml
 
 #python -m convert_to_hf config=apps/mtp/configs/config_upload.yaml
+python -m convert_to_hf_sequence config=apps/mtp/configs/config_upload.yaml
+
 #python -m test_generation
 #python -m test_training
-python -m test_sequence
+#python -m test_sequence
 
 #python -m huggingface.lingua_model
 
